@@ -3,3 +3,11 @@
 __pycache__/
 *.py[cod]
 .DS_Store
+
+# Large / third-party datasets are NOT committed — see DATA.md for sources.
+Data/SeoulFloating.csv
+Data/PatientInfo.csv
+Data/외부/코로나_00.csv
+Data/외부/한국언론진흥재단_뉴스빅데이터_메타데이터_ESG_20201231.csv
+Data/외부/train.csv
+Data/외부/test2.csv

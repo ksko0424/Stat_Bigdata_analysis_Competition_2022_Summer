@@ -67,25 +67,38 @@
 - 분류 모델은 BERT를 사용했습니다.
 - 각 분야별 뉴스 6,800개와 코로나 관련 기사 4,000개를 훈련자료로 사용했습니다.
 
-![image](https://user-images.githubusercontent.com/73769046/181712448-7b42c4a0-ee4e-43af-99b3-b7210307cdea.png)
+![COVID-19 news classification (BERT)](assets/fig01_covid_news_bert.png)
 
 ## 2. 기사의 긍·부정 분류
 
 - KNU 감성사전을 이용하여 부정어를 구축했습니다.
 - Train 데이터를 긍·부정으로 분류하고 라벨링한 뒤 학습했습니다.
 
-![image](https://user-images.githubusercontent.com/73769046/181712683-578465c1-9aa4-4169-96ac-28c44148d8e8.png)
-![image](https://user-images.githubusercontent.com/73769046/181712715-8ba76a08-9ce6-4606-96b0-61a02ea62f9e.png)
+![Sentiment dictionary labeling](assets/fig02_sentiment_dict.png)
+![Sentiment classification result](assets/fig03_sentiment_result.png)
 
 ## 정리
 
-![image](https://user-images.githubusercontent.com/73769046/181712782-0350082d-ad63-4f6f-94e2-372481775fbb.png)
+![Summary](assets/fig04_summary.png)
 
 ## 한계 및 보완점
 
 - **데이터 불균형**: 모델 정확도를 해석할 때 긍·부정 클래스 비율과 코로나/비코로나 기사 비율을 함께 확인해야 합니다. Accuracy만으로 성능을 판단하기보다 precision, recall, F1-score, confusion matrix를 함께 보는 것이 필요합니다.
 - **상관관계와 인과관계 구분**: 온라인 카드 소비 증가는 코로나 스트레스뿐 아니라 비대면 소비 확산, 배달/이커머스 성장, 사회적 거리두기 정책 등 외부 요인의 영향을 받을 수 있습니다. 따라서 본 분석은 인과관계 증명이라기보다 문제 가설 도출과 탐색적 분석으로 해석하는 것이 적절합니다.
 - **서비스 적용 시 윤리적 고려**: 기사 노출 순서 조절은 언론의 자유, 알고리즘 편향, 필터버블, 정보 접근권 문제를 동반할 수 있습니다. 실제 서비스로 확장하려면 사용자 선택권, 투명한 설명, 다양한 관점 노출 보장 장치가 필요합니다.
+
+## 통계 재현 및 주의 (Statistics)
+
+헤드라인 통계는 `scripts/verify_stats.py`로 재현·확인할 수 있습니다.
+
+```bash
+python scripts/verify_stats.py
+```
+
+- **부정적 기사 1.73배 증가, p<0.001** — 코로나 전후 부정기사 비율(75/800 → 130/800)의 **이표본 비율검정**으로 재현됩니다(z=4.11, p≈3.9e-5, chi-square 동일). ✅ 가장 견고한 결과입니다. 단, 800개 기사의 긍/부정 라벨은 분류 모델 산출물이라 라벨 오차가 실립니다.
+- **확진자·자살자 수 ↔ 온라인 카드소비 상관(약 0.71 / 0.69)** — **월단위 N≈6개 점**에 대한 *기술적* 상관입니다. **유의성 검정을 수행하지 않았고**, 집계 방식(누적 vs 신규 확진)에 민감하며(신규 확진으로 재계산 시 r이 크게 낮아짐), **인과관계가 아닙니다.** 탐색적 가설 도출로만 해석하세요.
+
+데이터 출처·다운로드는 [`DATA.md`](./DATA.md) 참고. (대용량·제3자·개인정보성 데이터는 저장소에 커밋하지 않습니다.)
 
 ## 주요 파일
 
